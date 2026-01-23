@@ -1,0 +1,33 @@
+# Unified Notification Interceptor Configuration
+# Copy this file to config.yaml and fill in your credentials
+
+whatsapp:
+  enabled: true
+  storage_path: "./data/whatsapp"
+
+telegram:
+  enabled: true
+  app_id: ${TELEGRAM_APP_ID}      # Get from https://my.telegram.org
+  app_hash: ${TELEGRAM_APP_HASH}
+  phone: "+1234567890"             # Your phone number with country code
+  data_path: "./data/telegram"
+
+slack:
+  enabled: true
+  app_token: ${SLACK_APP_TOKEN}   # xapp-... (Socket Mode token)
+  bot_token: ${SLACK_BOT_TOKEN}   # xoxb-... (Bot token)
+
+gmail:
+  enabled: true
+  credentials_path: "./credentials.json"  # OAuth2 credentials from Google Cloud Console
+  token_path: "./token.json"
+  poll_interval_seconds: 60
+
+pushover:
+  app_token: ${PUSHOVER_APP_TOKEN}
+  user_token: ${PUSHOVER_USER_TOKEN}
+
+llm:
+  provider: "openai"              # "openai" or "gemini"
+  api_key: ${OPENAI_API_KEY}
+  model: "gpt-4o-mini"

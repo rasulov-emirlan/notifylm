@@ -1,0 +1,34 @@
+# Binaries
+/notifylm
+*.exe
+
+# Data directories
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Credentials and tokens
+config.yaml
+credentials.json
+gmail-credentials.json
+token.json
+session.json
+*.pem
+*.key
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+vendor/
+
+# Claude Code
+.claude/
