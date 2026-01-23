@@ -7,6 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/openai/openai-go"
+	"github.com/openai/openai-go/option"
+
 	"github.com/emirlan/notifylm/internal/config"
 	"github.com/emirlan/notifylm/internal/message"
 )
@@ -19,90 +22,122 @@ type Classifier interface {
 
 // LLMClassifier uses an LLM to classify message urgency.
 type LLMClassifier struct {
-	cfg config.LLMConfig
+	cfg    config.LLMConfig
+	client openai.Client
+	hasLLM bool
 }
 
 // NewLLMClassifier creates a new LLM-based classifier.
 func NewLLMClassifier(cfg config.LLMConfig) *LLMClassifier {
-	return &LLMClassifier{cfg: cfg}
+	c := &LLMClassifier{cfg: cfg}
+	if cfg.Provider == "openai" && cfg.APIKey != "" {
+		c.client = openai.NewClient(option.WithAPIKey(cfg.APIKey))
+		c.hasLLM = true
+	}
+	return c
 }
 
 // ClassifyMessage sends the message to an LLM for classification.
-// This is a mock implementation - replace with actual API calls.
 func (c *LLMClassifier) ClassifyMessage(ctx context.Context, msg *message.Message) (bool, error) {
-	// Build prompt for LLM
-	prompt := buildClassificationPrompt(msg)
-
 	slog.Debug("Classifying message",
 		"source", msg.Source,
 		"sender", msg.Sender,
 		"text_preview", truncate(msg.Text, 50))
 
-	// TODO: Replace with actual LLM API call
-	// This mock implementation uses simple heuristics
-	result, err := c.mockLLMCall(ctx, prompt)
-	if err != nil {
-		return false, fmt.Errorf("LLM classification failed: %w", err)
+	// Use OpenAI if configured, otherwise fall back to keyword matching
+	if c.hasLLM {
+		return c.callOpenAI(ctx, msg)
 	}
 
-	return result, nil
+	// Fallback to keyword-based classification
+	return c.keywordClassify(msg), nil
 }
 
-func buildClassificationPrompt(msg *message.Message) string {
-	return fmt.Sprintf(`Analyze this message and determine if it requires immediate attention.
+func (c *LLMClassifier) callOpenAI(ctx context.Context, msg *message.Message) (bool, error) {
+	model := c.cfg.Model
+	if model == "" {
+		model = "gpt-5-nano"
+	}
 
-Source: %s
-Sender: %s
-Timestamp: %s
-Message: %s
+	systemPrompt := `You are a message urgency classifier. Analyze messages and determine if they require immediate attention.
 
-Respond with only "URGENT" or "NOT_URGENT".
+Respond with ONLY "URGENT" or "NOT_URGENT".
 
-Consider these factors:
-- Emergency keywords (urgent, ASAP, emergency, critical, help)
-- Time-sensitive requests
-- Important people (based on context)
-- Financial or security matters
+A message is URGENT if it contains:
+- Emergency situations or safety concerns
+- Time-sensitive requests with immediate deadlines
+- Financial emergencies or security alerts
 - Health-related concerns
+- Explicit urgency indicators (ASAP, urgent, critical, emergency)
+- Someone asking for immediate help
 
-Classification:`,
+A message is NOT_URGENT if it's:
+- General conversation or greetings
+- Marketing or promotional content
+- Newsletters or automated notifications
+- Non-time-sensitive questions
+- Social media updates
+- Routine status updates`
+
+	userPrompt := fmt.Sprintf("Source: %s\nFrom: %s\nTime: %s\n\nMessage:\n%s",
 		msg.Source,
 		msg.Sender,
 		msg.Timestamp.Format(time.RFC3339),
 		msg.Text,
 	)
-}
 
-// mockLLMCall simulates an LLM API call for classification.
-// Replace this with actual OpenAI/Gemini API integration.
-func (c *LLMClassifier) mockLLMCall(ctx context.Context, prompt string) (bool, error) {
-	// Simulate API latency
-	select {
-	case <-ctx.Done():
-		return false, ctx.Err()
-	case <-time.After(100 * time.Millisecond):
+	resp, err := c.client.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
+		Model: model,
+		Messages: []openai.ChatCompletionMessageParamUnion{
+			openai.SystemMessage(systemPrompt),
+			openai.UserMessage(userPrompt),
+		},
+		MaxCompletionTokens: openai.Int(50),
+	})
+	if err != nil {
+		return false, fmt.Errorf("OpenAI API error: %w", err)
 	}
 
-	// Simple heuristic-based mock classification
-	text := strings.ToLower(prompt)
+	if len(resp.Choices) == 0 {
+		return false, fmt.Errorf("no response from OpenAI")
+	}
+
+	// Log full response for debugging
+	slog.Debug("OpenAI raw response",
+		"finish_reason", resp.Choices[0].FinishReason,
+		"content", resp.Choices[0].Message.Content,
+		"refusal", resp.Choices[0].Message.Refusal)
+
+	result := strings.TrimSpace(strings.ToUpper(resp.Choices[0].Message.Content))
+	isUrgent := strings.Contains(result, "URGENT") && !strings.Contains(result, "NOT_URGENT")
+
+	slog.Info("OpenAI classification result",
+		"result", result,
+		"is_urgent", isUrgent,
+		"model", model)
+
+	return isUrgent, nil
+}
+
+func (c *LLMClassifier) keywordClassify(msg *message.Message) bool {
+	text := strings.ToLower(msg.Text + " " + msg.Sender)
 
 	urgentKeywords := []string{
-		"urgent", "asap", "emergency", "critical", "important",
-		"help", "immediately", "now", "deadline", "alert",
+		"urgent", "asap", "emergency", "critical",
+		"help", "immediately", "deadline",
 		"security", "breach", "down", "broken", "failed",
-		"payment", "money", "transfer", "invoice",
-		"call me", "call asap", "need you",
+		"payment due", "transfer", "call me", "call asap",
 	}
 
 	for _, keyword := range urgentKeywords {
 		if strings.Contains(text, keyword) {
-			slog.Info("Message classified as URGENT",
+			slog.Info("Message classified as URGENT (keyword)",
 				"keyword_matched", keyword)
-			return true, nil
+			return true
 		}
 	}
 
-	return false, nil
+	return false
 }
 
 func truncate(s string, maxLen int) string {
@@ -111,44 +146,3 @@ func truncate(s string, maxLen int) string {
 	}
 	return s[:maxLen] + "..."
 }
-
-// RealLLMClassifier provides actual LLM integration.
-// Uncomment and implement when ready to use real API.
-/*
-type RealLLMClassifier struct {
-	cfg    config.LLMConfig
-	client *http.Client
-}
-
-func NewRealLLMClassifier(cfg config.LLMConfig) *RealLLMClassifier {
-	return &RealLLMClassifier{
-		cfg:    cfg,
-		client: &http.Client{Timeout: 30 * time.Second},
-	}
-}
-
-func (c *RealLLMClassifier) ClassifyMessage(ctx context.Context, msg *message.Message) (bool, error) {
-	prompt := buildClassificationPrompt(msg)
-
-	switch c.cfg.Provider {
-	case "openai":
-		return c.callOpenAI(ctx, prompt)
-	case "gemini":
-		return c.callGemini(ctx, prompt)
-	default:
-		return false, fmt.Errorf("unknown LLM provider: %s", c.cfg.Provider)
-	}
-}
-
-func (c *RealLLMClassifier) callOpenAI(ctx context.Context, prompt string) (bool, error) {
-	// Implement OpenAI API call
-	// POST https://api.openai.com/v1/chat/completions
-	return false, nil
-}
-
-func (c *RealLLMClassifier) callGemini(ctx context.Context, prompt string) (bool, error) {
-	// Implement Gemini API call
-	// POST https://generativelanguage.googleapis.com/v1/models/{model}:generateContent
-	return false, nil
-}
-*/
