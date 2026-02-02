@@ -14,6 +14,7 @@ type Config struct {
 	Gmail    GmailConfig    `yaml:"gmail"`
 	Pushover PushoverConfig `yaml:"pushover"`
 	LLM      LLMConfig      `yaml:"llm"`
+	Calendar CalendarConfig `yaml:"calendar"`
 }
 
 type WhatsAppConfig struct {
@@ -53,6 +54,14 @@ type LLMConfig struct {
 	Model    string `yaml:"model"`
 }
 
+type CalendarConfig struct {
+	Enabled                bool   `yaml:"enabled"`
+	CredentialsPath        string `yaml:"credentials_path"`
+	TokenPath              string `yaml:"token_path"`
+	DefaultDurationMinutes int    `yaml:"default_duration_minutes"`
+	CalendarID             string `yaml:"calendar_id"`
+}
+
 // Load reads configuration from a YAML file.
 func Load(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
@@ -90,6 +99,13 @@ func DefaultConfig() *Config {
 			CredentialsPath: "./credentials.json",
 			TokenPath:       "./token.json",
 			PollInterval:    60,
+		},
+		Calendar: CalendarConfig{
+			Enabled:                false,
+			CredentialsPath:        "./credentials.json",
+			TokenPath:              "./calendar-token.json",
+			DefaultDurationMinutes: 30,
+			CalendarID:             "primary",
 		},
 	}
 }

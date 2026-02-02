@@ -3,19 +3,15 @@ package listener
 import (
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"log/slog"
-	"net/http"
-	"os"
 	"time"
 
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
 
 	"github.com/emirlan/notifylm/internal/config"
+	"github.com/emirlan/notifylm/internal/googleauth"
 	"github.com/emirlan/notifylm/internal/message"
 )
 
@@ -39,26 +35,13 @@ func NewGmailListener(cfg config.GmailConfig) *GmailListener {
 func (g *GmailListener) Start(ctx context.Context, out chan<- *message.Message) error {
 	g.out = out
 
-	// Load credentials
-	creds, err := os.ReadFile(g.cfg.CredentialsPath)
+	// Get authenticated client via shared OAuth2 helper
+	client, err := googleauth.GetOAuth2Client(ctx, g.cfg.CredentialsPath, g.cfg.TokenPath, gmail.GmailReadonlyScope)
 	if err != nil {
-		return fmt.Errorf("failed to read credentials: %w", err)
-	}
-
-	// Configure OAuth2
-	config, err := google.ConfigFromJSON(creds, gmail.GmailReadonlyScope)
-	if err != nil {
-		return fmt.Errorf("failed to parse credentials: %w", err)
-	}
-
-	// Get OAuth2 token
-	token, err := g.getToken(ctx, config)
-	if err != nil {
-		return fmt.Errorf("failed to get token: %w", err)
+		return fmt.Errorf("failed to get Gmail OAuth2 client: %w", err)
 	}
 
 	// Create Gmail service
-	client := config.Client(ctx, token)
 	g.service, err = gmail.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		return fmt.Errorf("failed to create Gmail service: %w", err)
@@ -188,62 +171,7 @@ func extractGmailBody(payload *gmail.MessagePart) string {
 	return ""
 }
 
-func (g *GmailListener) getToken(ctx context.Context, config *oauth2.Config) (*oauth2.Token, error) {
-	// Try to load existing token
-	token, err := g.loadToken()
-	if err == nil {
-		return token, nil
-	}
-
-	// Need to get new token via OAuth flow
-	authURL := config.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
-	fmt.Printf("Gmail: Open this URL in your browser:\n%s\n\n", authURL)
-	fmt.Print("Enter authorization code: ")
-
-	var code string
-	if _, err := fmt.Scan(&code); err != nil {
-		return nil, fmt.Errorf("failed to read auth code: %w", err)
-	}
-
-	token, err = config.Exchange(ctx, code)
-	if err != nil {
-		return nil, fmt.Errorf("failed to exchange code: %w", err)
-	}
-
-	// Save token for next time
-	if err := g.saveToken(token); err != nil {
-		slog.Warn("Failed to save Gmail token", "error", err)
-	}
-
-	return token, nil
-}
-
-func (g *GmailListener) loadToken() (*oauth2.Token, error) {
-	data, err := os.ReadFile(g.cfg.TokenPath)
-	if err != nil {
-		return nil, err
-	}
-
-	var token oauth2.Token
-	if err := json.Unmarshal(data, &token); err != nil {
-		return nil, err
-	}
-
-	return &token, nil
-}
-
-func (g *GmailListener) saveToken(token *oauth2.Token) error {
-	data, err := json.MarshalIndent(token, "", "  ")
-	if err != nil {
-		return err
-	}
-	return os.WriteFile(g.cfg.TokenPath, data, 0600)
-}
-
 func (g *GmailListener) Stop() error {
 	// Polling cleanup is handled by context cancellation
 	return nil
 }
-
-// Compile-time check to ensure we handle the http import
-var _ = http.StatusOK

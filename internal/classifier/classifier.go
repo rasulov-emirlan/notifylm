@@ -2,6 +2,7 @@ package classifier
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"strings"
@@ -14,13 +15,26 @@ import (
 	"github.com/emirlan/notifylm/internal/message"
 )
 
-// Classifier determines if messages are urgent/important.
-type Classifier interface {
-	// ClassifyMessage returns true if the message is urgent/important.
-	ClassifyMessage(ctx context.Context, msg *message.Message) (bool, error)
+// ActionItem represents a detected action item with an optional date/time.
+type ActionItem struct {
+	Title           string
+	Description     string
+	DateTime        time.Time
+	DurationMinutes int
 }
 
-// LLMClassifier uses an LLM to classify message urgency.
+// ClassificationResult holds the outcome of classifying a message.
+type ClassificationResult struct {
+	IsUrgent    bool
+	ActionItems []ActionItem
+}
+
+// Classifier determines if messages are urgent/important and extracts action items.
+type Classifier interface {
+	ClassifyMessage(ctx context.Context, msg *message.Message) (*ClassificationResult, error)
+}
+
+// LLMClassifier uses an LLM to classify message urgency and extract action items.
 type LLMClassifier struct {
 	cfg    config.LLMConfig
 	client openai.Client
@@ -38,46 +52,54 @@ func NewLLMClassifier(cfg config.LLMConfig) *LLMClassifier {
 }
 
 // ClassifyMessage sends the message to an LLM for classification.
-func (c *LLMClassifier) ClassifyMessage(ctx context.Context, msg *message.Message) (bool, error) {
+func (c *LLMClassifier) ClassifyMessage(ctx context.Context, msg *message.Message) (*ClassificationResult, error) {
 	slog.Debug("Classifying message",
 		"source", msg.Source,
 		"sender", msg.Sender,
 		"text_preview", truncate(msg.Text, 50))
 
-	// Use OpenAI if configured, otherwise fall back to keyword matching
 	if c.hasLLM {
 		return c.callOpenAI(ctx, msg)
 	}
 
-	// Fallback to keyword-based classification
 	return c.keywordClassify(msg), nil
 }
 
-func (c *LLMClassifier) callOpenAI(ctx context.Context, msg *message.Message) (bool, error) {
+// llmResponse is the expected JSON structure from the LLM.
+type llmResponse struct {
+	Urgent      bool              `json:"urgent"`
+	ActionItems []llmActionItem   `json:"action_items"`
+}
+
+type llmActionItem struct {
+	Title           string `json:"title"`
+	Description     string `json:"description"`
+	Datetime        string `json:"datetime"`
+	DurationMinutes int    `json:"duration_minutes"`
+}
+
+func (c *LLMClassifier) callOpenAI(ctx context.Context, msg *message.Message) (*ClassificationResult, error) {
 	model := c.cfg.Model
 	if model == "" {
 		model = "gpt-5-nano"
 	}
 
-	systemPrompt := `You are a message urgency classifier. Analyze messages and determine if they require immediate attention.
+	systemPrompt := `You are a message analysis assistant. Analyze the message and return a JSON object with two fields:
 
-Respond with ONLY "URGENT" or "NOT_URGENT".
+1. "urgent" (boolean): true if the message requires immediate attention.
+   Urgent criteria: emergencies, safety concerns, immediate deadlines, financial/security alerts, health concerns, explicit urgency (ASAP, urgent, critical).
+   Not urgent: general conversation, marketing, newsletters, routine updates.
 
-A message is URGENT if it contains:
-- Emergency situations or safety concerns
-- Time-sensitive requests with immediate deadlines
-- Financial emergencies or security alerts
-- Health-related concerns
-- Explicit urgency indicators (ASAP, urgent, critical, emergency)
-- Someone asking for immediate help
+2. "action_items" (array): extract any action items that have a specific date or deadline. Each item has:
+   - "title": short summary of the action
+   - "description": fuller context
+   - "datetime": ISO 8601 / RFC 3339 datetime string (e.g. "2025-03-15T14:00:00Z"). Only include if a specific date/time is mentioned or can be inferred.
+   - "duration_minutes": estimated duration in minutes (default 30 if unclear)
 
-A message is NOT_URGENT if it's:
-- General conversation or greetings
-- Marketing or promotional content
-- Newsletters or automated notifications
-- Non-time-sensitive questions
-- Social media updates
-- Routine status updates`
+   If there are no action items with dates, return an empty array.
+
+Respond with ONLY valid JSON, no markdown fences or extra text. Example:
+{"urgent": false, "action_items": [{"title": "Team meeting", "description": "Weekly sync with engineering", "datetime": "2025-03-15T14:00:00Z", "duration_minutes": 60}]}`
 
 	userPrompt := fmt.Sprintf("Source: %s\nFrom: %s\nTime: %s\n\nMessage:\n%s",
 		msg.Source,
@@ -92,34 +114,98 @@ A message is NOT_URGENT if it's:
 			openai.SystemMessage(systemPrompt),
 			openai.UserMessage(userPrompt),
 		},
-		MaxCompletionTokens: openai.Int(50),
+		MaxCompletionTokens: openai.Int(500),
 	})
 	if err != nil {
-		return false, fmt.Errorf("OpenAI API error: %w", err)
+		return nil, fmt.Errorf("OpenAI API error: %w", err)
 	}
 
 	if len(resp.Choices) == 0 {
-		return false, fmt.Errorf("no response from OpenAI")
+		return nil, fmt.Errorf("no response from OpenAI")
 	}
 
-	// Log full response for debugging
+	content := strings.TrimSpace(resp.Choices[0].Message.Content)
+
 	slog.Debug("OpenAI raw response",
 		"finish_reason", resp.Choices[0].FinishReason,
-		"content", resp.Choices[0].Message.Content,
+		"content", content,
 		"refusal", resp.Choices[0].Message.Refusal)
 
-	result := strings.TrimSpace(strings.ToUpper(resp.Choices[0].Message.Content))
-	isUrgent := strings.Contains(result, "URGENT") && !strings.Contains(result, "NOT_URGENT")
+	// Try to parse as JSON
+	result, err := parseJSONResponse(content)
+	if err != nil {
+		slog.Warn("Failed to parse LLM JSON response, falling back to string matching",
+			"error", err,
+			"content", content)
+		return fallbackStringMatch(content), nil
+	}
 
 	slog.Info("OpenAI classification result",
-		"result", result,
-		"is_urgent", isUrgent,
+		"is_urgent", result.IsUrgent,
+		"action_items", len(result.ActionItems),
 		"model", model)
 
-	return isUrgent, nil
+	return result, nil
 }
 
-func (c *LLMClassifier) keywordClassify(msg *message.Message) bool {
+func parseJSONResponse(content string) (*ClassificationResult, error) {
+	// Strip markdown code fences if present
+	content = strings.TrimPrefix(content, "```json")
+	content = strings.TrimPrefix(content, "```")
+	content = strings.TrimSuffix(content, "```")
+	content = strings.TrimSpace(content)
+
+	var resp llmResponse
+	if err := json.Unmarshal([]byte(content), &resp); err != nil {
+		return nil, fmt.Errorf("JSON unmarshal failed: %w", err)
+	}
+
+	result := &ClassificationResult{
+		IsUrgent: resp.Urgent,
+	}
+
+	for _, item := range resp.ActionItems {
+		ai := ActionItem{
+			Title:           item.Title,
+			Description:     item.Description,
+			DurationMinutes: item.DurationMinutes,
+		}
+		if ai.DurationMinutes <= 0 {
+			ai.DurationMinutes = 30
+		}
+		if item.Datetime != "" {
+			t, err := time.Parse(time.RFC3339, item.Datetime)
+			if err != nil {
+				slog.Warn("Failed to parse action item datetime",
+					"datetime", item.Datetime,
+					"error", err)
+				continue
+			}
+			ai.DateTime = t
+		} else {
+			// Skip action items without a datetime
+			continue
+		}
+		result.ActionItems = append(result.ActionItems, ai)
+	}
+
+	return result, nil
+}
+
+// fallbackStringMatch handles the case where the LLM returns plain text instead of JSON.
+func fallbackStringMatch(content string) *ClassificationResult {
+	upper := strings.ToUpper(content)
+	isUrgent := strings.Contains(upper, "URGENT") && !strings.Contains(upper, "NOT_URGENT")
+
+	slog.Info("Fallback string classification",
+		"is_urgent", isUrgent)
+
+	return &ClassificationResult{
+		IsUrgent: isUrgent,
+	}
+}
+
+func (c *LLMClassifier) keywordClassify(msg *message.Message) *ClassificationResult {
 	text := strings.ToLower(msg.Text + " " + msg.Sender)
 
 	urgentKeywords := []string{
@@ -133,11 +219,11 @@ func (c *LLMClassifier) keywordClassify(msg *message.Message) bool {
 		if strings.Contains(text, keyword) {
 			slog.Info("Message classified as URGENT (keyword)",
 				"keyword_matched", keyword)
-			return true
+			return &ClassificationResult{IsUrgent: true}
 		}
 	}
 
-	return false
+	return &ClassificationResult{IsUrgent: false}
 }
 
 func truncate(s string, maxLen int) string {

@@ -6,6 +6,7 @@ require (
 	github.com/gotd/td v0.137.0
 	github.com/gregdel/pushover v1.4.0
 	github.com/mattn/go-sqlite3 v1.14.33
+	github.com/openai/openai-go v1.12.0
 	github.com/slack-go/slack v0.17.3
 	go.mau.fi/whatsmeow v0.0.0-20260122001212-37568b947bd4
 	golang.org/x/oauth2 v0.34.0
@@ -44,7 +45,6 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ogen-go/ogen v1.16.0 // indirect
-	github.com/openai/openai-go v1.12.0 // indirect
 	github.com/petermattis/goid v0.0.0-20260113132338-7c7de50cc741 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
 	github.com/segmentio/asm v1.2.1 // indirect

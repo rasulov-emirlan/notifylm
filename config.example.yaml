@@ -31,3 +31,10 @@ llm:
   provider: "openai"              # "openai" or "gemini"
   api_key: ${OPENAI_API_KEY}
   model: "gpt-4o-mini"
+
+calendar:
+  enabled: true
+  credentials_path: "./credentials.json"    # Same OAuth2 credentials, separate token
+  token_path: "./calendar-token.json"
+  default_duration_minutes: 30
+  calendar_id: "primary"                    # Or a specific calendar ID
