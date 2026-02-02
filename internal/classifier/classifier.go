@@ -10,6 +10,7 @@ import (
 
 	"github.com/openai/openai-go"
 	"github.com/openai/openai-go/option"
+	"github.com/openai/openai-go/shared"
 
 	"github.com/emirlan/notifylm/internal/config"
 	"github.com/emirlan/notifylm/internal/message"
@@ -114,7 +115,12 @@ Respond with ONLY valid JSON, no markdown fences or extra text. Example:
 			openai.SystemMessage(systemPrompt),
 			openai.UserMessage(userPrompt),
 		},
-		MaxCompletionTokens: openai.Int(500),
+		MaxCompletionTokens: openai.Int(4096),
+		ResponseFormat: openai.ChatCompletionNewParamsResponseFormatUnion{
+			OfJSONObject: &shared.ResponseFormatJSONObjectParam{
+				Type: "json_object",
+			},
+		},
 	})
 	if err != nil {
 		return nil, fmt.Errorf("OpenAI API error: %w", err)
@@ -125,6 +131,10 @@ Respond with ONLY valid JSON, no markdown fences or extra text. Example:
 	}
 
 	content := strings.TrimSpace(resp.Choices[0].Message.Content)
+	if content == "" {
+		return nil, fmt.Errorf("OpenAI returned empty response (finish_reason=%s)",
+			resp.Choices[0].FinishReason)
+	}
 
 	slog.Debug("OpenAI raw response",
 		"finish_reason", resp.Choices[0].FinishReason,

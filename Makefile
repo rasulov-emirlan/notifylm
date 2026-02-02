@@ -1,4 +1,4 @@
-.PHONY: build run clean test lint deps
+.PHONY: build run clean test test-integration lint deps
 
 BINARY_NAME=notifylm
 BUILD_DIR=./cmd/notifylm
@@ -21,6 +21,9 @@ clean:
 
 test:
 	go test -v ./...
+
+test-integration:
+	OPENAI_API_KEY=$(OPENAI_API_KEY) go test -v -tags=integration -timeout 120s ./internal/classifier/
 
 lint:
 	golangci-lint run
