@@ -17,6 +17,8 @@ import (
 	"github.com/emirlan/notifylm/internal/listener"
 	"github.com/emirlan/notifylm/internal/message"
 	"github.com/emirlan/notifylm/internal/notifier"
+	"github.com/emirlan/notifylm/internal/server"
+	"github.com/emirlan/notifylm/internal/store"
 )
 
 func main() {
@@ -58,8 +60,41 @@ func main() {
 	// Create central message channel
 	messageChan := make(chan *message.Message, 100)
 
+	// Create in-memory store for the dashboard
+	msgStore := store.NewStore(500)
+
 	// Initialize listeners
 	listeners := initializeListeners(cfg)
+
+	// Register listeners in the store
+	for _, l := range listeners {
+		var src message.Source
+		switch l.Name() {
+		case "WhatsApp":
+			src = message.SourceWhatsApp
+		case "Telegram":
+			src = message.SourceTelegram
+		case "Slack":
+			src = message.SourceSlack
+		case "Gmail":
+			src = message.SourceGmail
+		}
+		msgStore.UpdateListenerStatus(l.Name(), src, true)
+	}
+
+	// Start dashboard server
+	if cfg.Server.Enabled {
+		srv := server.New(msgStore, cfg.Server.Port)
+		if err := srv.Start(); err != nil {
+			slog.Error("Failed to start dashboard server", "error", err)
+		} else {
+			defer func() {
+				shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 5*time.Second)
+				defer shutdownCancel()
+				srv.Shutdown(shutdownCtx)
+			}()
+		}
+	}
 
 	// Initialize classifier
 	msgClassifier := classifier.NewLLMClassifier(cfg.LLM)
@@ -95,7 +130,7 @@ func main() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		processMessages(ctx, messageChan, msgClassifier, msgNotifier, calendarCreator)
+		processMessages(ctx, messageChan, msgClassifier, msgNotifier, calendarCreator, msgStore)
 	}()
 
 	// Start all listeners concurrently
@@ -162,20 +197,21 @@ func processMessages(
 	cls classifier.Classifier,
 	notify notifier.Notifier,
 	cal calendar.EventCreator,
+	st *store.Store,
 ) {
 	for {
 		select {
 		case <-ctx.Done():
 			// Drain remaining messages
 			for msg := range messages {
-				handleMessage(ctx, msg, cls, notify, cal)
+				handleMessage(ctx, msg, cls, notify, cal, st)
 			}
 			return
 		case msg, ok := <-messages:
 			if !ok {
 				return
 			}
-			handleMessage(ctx, msg, cls, notify, cal)
+			handleMessage(ctx, msg, cls, notify, cal, st)
 		}
 	}
 }
@@ -186,11 +222,15 @@ func handleMessage(
 	cls classifier.Classifier,
 	notify notifier.Notifier,
 	cal calendar.EventCreator,
+	st *store.Store,
 ) {
 	slog.Debug("Received message",
 		"source", msg.Source,
 		"sender", msg.Sender,
 		"text_length", len(msg.Text))
+
+	// Track in store
+	st.IncrementListenerMessageCount(msg.Source)
 
 	// Classify message urgency and extract action items
 	result, err := cls.ClassifyMessage(ctx, msg)
@@ -198,8 +238,16 @@ func handleMessage(
 		slog.Error("Classification failed",
 			"source", msg.Source,
 			"error", err)
+		// Still record the message in the store without classification
+		st.AddProcessedMessage(store.ProcessedMessage{
+			Message:     msg,
+			ProcessedAt: time.Now(),
+		})
 		return
 	}
+
+	var notifiedAt *time.Time
+	eventsCreated := 0
 
 	// Handle urgency notification
 	if result.IsUrgent {
@@ -211,6 +259,14 @@ func handleMessage(
 			slog.Error("Failed to send urgency notification",
 				"source", msg.Source,
 				"error", err)
+		} else {
+			now := time.Now()
+			notifiedAt = &now
+			st.AddNotification(store.Notification{
+				Message: msg,
+				Reason:  "urgent",
+				SentAt:  now,
+			})
 		}
 	}
 
@@ -235,6 +291,16 @@ func handleMessage(
 			slog.Error("Failed to send action item notification",
 				"title", item.Title,
 				"error", err)
+		} else {
+			now := time.Now()
+			if notifiedAt == nil {
+				notifiedAt = &now
+			}
+			st.AddNotification(store.Notification{
+				Message: msg,
+				Reason:  "action_item",
+				SentAt:  now,
+			})
 		}
 
 		// Create calendar event
@@ -243,9 +309,20 @@ func handleMessage(
 				slog.Error("Failed to create calendar event",
 					"title", item.Title,
 					"error", err)
+			} else {
+				eventsCreated++
 			}
 		}
 	}
+
+	// Record processed message in the store
+	st.AddProcessedMessage(store.ProcessedMessage{
+		Message:        msg,
+		Classification: result,
+		NotifiedAt:     notifiedAt,
+		EventsCreated:  eventsCreated,
+		ProcessedAt:    time.Now(),
+	})
 
 	if !result.IsUrgent && len(result.ActionItems) == 0 {
 		slog.Debug("Message classified as not urgent, no action items",

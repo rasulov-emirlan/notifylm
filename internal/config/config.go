@@ -15,6 +15,7 @@ type Config struct {
 	Pushover PushoverConfig `yaml:"pushover"`
 	LLM      LLMConfig      `yaml:"llm"`
 	Calendar CalendarConfig `yaml:"calendar"`
+	Server   ServerConfig   `yaml:"server"`
 }
 
 type WhatsAppConfig struct {
@@ -62,6 +63,11 @@ type CalendarConfig struct {
 	CalendarID             string `yaml:"calendar_id"`
 }
 
+type ServerConfig struct {
+	Enabled bool `yaml:"enabled"`
+	Port    int  `yaml:"port"`
+}
+
 // Load reads configuration from a YAML file.
 func Load(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
@@ -106,6 +112,10 @@ func DefaultConfig() *Config {
 			TokenPath:              "./calendar-token.json",
 			DefaultDurationMinutes: 30,
 			CalendarID:             "primary",
+		},
+		Server: ServerConfig{
+			Enabled: true,
+			Port:    8080,
 		},
 	}
 }

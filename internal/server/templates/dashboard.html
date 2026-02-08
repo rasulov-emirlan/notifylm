@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>notifylm — Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-deep: #050a18;
+      --bg-primary: #0a0e1a;
+      --bg-card: rgba(15, 23, 42, 0.7);
+      --bg-card-solid: #0f172a;
+      --bg-card-hover: #1a2235;
+      --bg-inset: rgba(0, 0, 0, 0.25);
+      --border-subtle: rgba(56, 189, 248, 0.06);
+      --border-default: rgba(56, 189, 248, 0.1);
+      --border-glow: rgba(56, 189, 248, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-teal: #2dd4bf;
+      --accent-indigo: #818cf8;
+      --urgent-red: #f87171;
+      --urgent-glow: rgba(248, 113, 113, 0.15);
+      --success-green: #34d399;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --text-dim: #475569;
+      --whatsapp: #22c55e;
+      --telegram: #38bdf8;
+      --slack: #a78bfa;
+      --gmail: #f87171;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.05);
+    }
+
+    html { font-size: 15px; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Atmospheric background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 50%, rgba(56, 189, 248, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 85% 20%, rgba(167, 139, 250, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 90%, rgba(45, 212, 191, 0.02) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Grain texture overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.015;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Dashboard grid */
+    .dashboard {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-areas:
+        "header   header"
+        "stats    stats"
+        "feed     sidebar"
+        "notifs   notifs";
+      gap: 14px;
+      padding: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    /* === HEADER === */
+    .header {
+      grid-area: header;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0 8px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.6rem;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--success-green);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success-green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .uptime-badge {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-inset);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* === CARDS === */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-glow);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+    }
+
+    .card-count {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    .card-body {
+      padding: 12px 18px 16px;
+    }
+
+    /* === STATS === */
+    .stats-row {
+      grid-area: stats;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover::before { opacity: 1; }
+    .stat-card:hover { border-color: var(--border-glow); }
+
+    .stat-card.urgent .stat-value { color: var(--urgent-red); }
+    .stat-card.urgent::before {
+      background: linear-gradient(90deg, transparent, var(--urgent-red), transparent);
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.8rem;
+      line-height: 1;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    /* Per-source mini stats */
+    .source-breakdown {
+      display: flex;
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .source-mini {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-inset);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-secondary);
+    }
+
+    .source-mini .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+
+    .dot.whatsapp { background: var(--whatsapp); }
+    .dot.telegram { background: var(--telegram); }
+    .dot.slack { background: var(--slack); }
+    .dot.gmail { background: var(--gmail); }
+
+    /* === MESSAGE FEED === */
+    .feed { grid-area: feed; display: flex; flex-direction: column; min-height: 0; }
+    .feed .card-body {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 60vh;
+      scrollbar-width: thin;
+      scrollbar-color: var(--text-dim) transparent;
+    }
+
+    .feed .card-body::-webkit-scrollbar { width: 4px; }
+    .feed .card-body::-webkit-scrollbar-track { background: transparent; }
+    .feed .card-body::-webkit-scrollbar-thumb {
+      background: var(--text-dim);
+      border-radius: 4px;
+    }
+
+    .message-item {
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      background: var(--bg-inset);
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .message-item:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-subtle);
+    }
+
+    .message-item.urgent {
+      border-left: 3px solid var(--urgent-red);
+      background: var(--urgent-glow);
+    }
+
+    .message-item.urgent:hover {
+      box-shadow: inset 0 0 30px rgba(248, 113, 113, 0.05);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .source-badge.whatsapp {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--whatsapp);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+    .source-badge.telegram {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--telegram);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .source-badge.slack {
+      background: rgba(167, 139, 250, 0.12);
+      color: var(--slack);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+    }
+    .source-badge.gmail {
+      background: rgba(248, 113, 113, 0.12);
+      color: var(--gmail);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+
+    .sender {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .timestamp {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+
+    .message-body {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .message-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag.urgent {
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--urgent-red);
+      border: 1px solid rgba(248, 113, 113, 0.25);
+    }
+
+    .tag.action {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      grid-area: sidebar;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    /* === LISTENERS === */
+    .listener-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      background: var(--bg-inset);
+      margin-bottom: 6px;
+      transition: background 0.2s ease;
+    }
+
+    .listener-item:hover { background: var(--bg-card-hover); }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.connected {
+      background: var(--success-green);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+    }
+
+    .status-dot.disconnected {
+      background: var(--text-dim);
+    }
+
+    .listener-info { flex: 1; }
+
+    .listener-name {
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--text-primary);
+    }
+
+    .listener-meta {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .listener-count {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    /* === ACTION ITEMS === */
+    .actions-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .actions-card .card-body {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 35vh;
+      scrollbar-width: thin;
+      scrollbar-color: var(--text-dim) transparent;
+    }
+
+    .actions-card .card-body::-webkit-scrollbar { width: 4px; }
+    .actions-card .card-body::-webkit-scrollbar-track { background: transparent; }
+    .actions-card .card-body::-webkit-scrollbar-thumb {
+      background: var(--text-dim);
+      border-radius: 4px;
+    }
+
+    .action-item {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      background: var(--bg-inset);
+      margin-bottom: 6px;
+      border-left: 2px solid var(--accent-cyan);
+      transition: background 0.2s ease;
+    }
+
+    .action-item:hover { background: var(--bg-card-hover); }
+
+    .action-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .action-title {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .action-check {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+    }
+
+    .action-check.created {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success-green);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .action-check.pending {
+      background: var(--bg-inset);
+      color: var(--text-dim);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .action-meta {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .action-description {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin: 4px 0;
+      line-height: 1.4;
+    }
+
+    /* === NOTIFICATIONS === */
+    .notifications {
+      grid-area: notifs;
+    }
+
+    .notifications .card-body {
+      max-height: 25vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--text-dim) transparent;
+    }
+
+    .notifications .card-body::-webkit-scrollbar { width: 4px; }
+    .notifications .card-body::-webkit-scrollbar-track { background: transparent; }
+    .notifications .card-body::-webkit-scrollbar-thumb {
+      background: var(--text-dim);
+      border-radius: 4px;
+    }
+
+    .notif-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-md);
+      background: var(--bg-inset);
+      margin-bottom: 5px;
+      transition: background 0.2s ease;
+    }
+
+    .notif-item:hover { background: var(--bg-card-hover); }
+
+    .notif-reason {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .notif-reason.urgent {
+      background: rgba(248, 113, 113, 0.12);
+      color: var(--urgent-red);
+    }
+
+    .notif-reason.action_item {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-cyan);
+    }
+
+    .notif-body {
+      flex: 1;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .notif-time {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    /* === EMPTY STATES === */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      opacity: 0.3;
+    }
+
+    .empty-state-text {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* === HTMX TRANSITIONS === */
+    .htmx-settling .message-item,
+    .htmx-settling .listener-item,
+    .htmx-settling .action-item,
+    .htmx-settling .notif-item,
+    .htmx-settling .stat-card {
+      transition: opacity 0.15s ease-in-out;
+    }
+
+    .htmx-added {
+      opacity: 0;
+    }
+
+    .htmx-added.message-item,
+    .htmx-added.listener-item,
+    .htmx-added.action-item,
+    .htmx-added.notif-item {
+      animation: slideIn 0.3s ease-out forwards;
+    }
+
+    /* === STAGGER LOAD ANIMATION === */
+    .stagger-1 { animation: fadeUp 0.5s ease-out 0.05s both; }
+    .stagger-2 { animation: fadeUp 0.5s ease-out 0.1s both; }
+    .stagger-3 { animation: fadeUp 0.5s ease-out 0.15s both; }
+    .stagger-4 { animation: fadeUp 0.5s ease-out 0.2s both; }
+    .stagger-5 { animation: fadeUp 0.5s ease-out 0.25s both; }
+    .stagger-6 { animation: fadeUp 0.5s ease-out 0.3s both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 1100px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "header"
+          "stats"
+          "feed"
+          "sidebar"
+          "notifs";
+      }
+      .stats-row { grid-template-columns: repeat(3, 1fr); }
+      .feed .card-body { max-height: 50vh; }
+      .sidebar { flex-direction: row; gap: 14px; }
+      .sidebar > * { flex: 1; }
+    }
+
+    @media (max-width: 700px) {
+      .dashboard { padding: 12px; gap: 10px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .sidebar { flex-direction: column; }
+      .stat-value { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">notifylm</div>
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          live
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="uptime-badge">uptime {{.Uptime}}</div>
+      </div>
+    </header>
+
+    <!-- ===== STATS ROW ===== -->
+    <section class="stats-row" hx-get="/api/stats" hx-trigger="every 5s" hx-swap="innerHTML">
+      <div class="stat-card stagger-1">
+        <div class="stat-value">{{.Stats.TotalMessages}}</div>
+        <div class="stat-label">Messages</div>
+        <div class="source-breakdown">
+          {{range $source, $count := .Stats.BySource}}
+          <span class="source-mini">
+            <span class="dot {{$source}}"></span>
+            {{$count}}
+          </span>
+          {{end}}
+        </div>
+      </div>
+      <div class="stat-card urgent stagger-2">
+        <div class="stat-value">{{.Stats.UrgentMessages}}</div>
+        <div class="stat-label">Urgent</div>
+      </div>
+      <div class="stat-card stagger-3">
+        <div class="stat-value">{{.Stats.TotalActionItems}}</div>
+        <div class="stat-label">Action Items</div>
+      </div>
+      <div class="stat-card stagger-4">
+        <div class="stat-value">{{.Stats.NotificationsSent}}</div>
+        <div class="stat-label">Notified</div>
+      </div>
+      <div class="stat-card stagger-5">
+        <div class="stat-value">{{.Stats.EventsCreated}}</div>
+        <div class="stat-label">Events</div>
+      </div>
+    </section>
+
+    <!-- ===== MESSAGE FEED ===== -->
+    <section class="feed card stagger-6">
+      <div class="card-header">
+        <span class="card-title">Message Feed</span>
+        <span class="card-count">{{len .Messages}} recent</span>
+      </div>
+      <div class="card-body" hx-get="/api/messages" hx-trigger="every 2s" hx-swap="innerHTML">
+        {{if .Messages}}
+          {{range .Messages}}
+          <div class="message-item {{if .Classification}}{{if .Classification.IsUrgent}}urgent{{end}}{{end}}">
+            <div class="message-header">
+              <span class="source-badge {{sourceColor .Message.Source}}">{{sourceIcon .Message.Source}} {{.Message.Source}}</span>
+              <span class="sender">{{.Message.Sender}}</span>
+              <span class="timestamp">{{timeAgo .Message.Timestamp}}</span>
+            </div>
+            <div class="message-body">{{truncateText .Message.Text 120}}</div>
+            <div class="message-tags">
+              {{if .Classification}}
+                {{if .Classification.IsUrgent}}<span class="tag urgent">urgent</span>{{end}}
+                {{if .Classification.ActionItems}}
+                  <span class="tag action">{{len .Classification.ActionItems}} action{{if gt (len .Classification.ActionItems) 1}}s{{end}}</span>
+                {{end}}
+              {{end}}
+            </div>
+          </div>
+          {{end}}
+        {{else}}
+          <div class="empty-state">
+            <div class="empty-state-icon">&#x1f4e1;</div>
+            <div class="empty-state-text">Waiting for messages...</div>
+          </div>
+        {{end}}
+      </div>
+    </section>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+
+      <!-- Listener Status -->
+      <div class="card stagger-6">
+        <div class="card-header">
+          <span class="card-title">Listeners</span>
+        </div>
+        <div class="card-body" hx-get="/api/listeners" hx-trigger="every 5s" hx-swap="innerHTML">
+          {{if .Listeners}}
+            {{range .Listeners}}
+            <div class="listener-item">
+              <span class="status-dot {{if .Connected}}connected{{else}}disconnected{{end}}"></span>
+              <div class="listener-info">
+                <div class="listener-name">{{.Name}}</div>
+                <div class="listener-meta">
+                  {{if .LastMessage}}Last: {{timeAgo .LastMessage}}{{else}}No messages yet{{end}}
+                </div>
+              </div>
+              <div class="listener-count">{{.MessageCount}}</div>
+            </div>
+            {{end}}
+          {{else}}
+            <div class="empty-state">
+              <div class="empty-state-icon">&#x1f50c;</div>
+              <div class="empty-state-text">No listeners configured</div>
+            </div>
+          {{end}}
+        </div>
+      </div>
+
+      <!-- Action Items -->
+      <div class="card actions-card stagger-6">
+        <div class="card-header">
+          <span class="card-title">Action Items</span>
+          <span class="card-count">{{len .ActionItems}}</span>
+        </div>
+        <div class="card-body" hx-get="/api/actions" hx-trigger="every 5s" hx-swap="innerHTML">
+          {{if .ActionItems}}
+            {{range .ActionItems}}
+            <div class="action-item">
+              <div class="action-header">
+                <span class="action-title">{{.Item.Title}}</span>
+                <span class="action-check {{if .EventCreated}}created{{else}}pending{{end}}">
+                  {{if .EventCreated}}&#x2713;{{else}}&#x2026;{{end}}
+                </span>
+              </div>
+              {{if .Item.Description}}
+                <div class="action-description">{{truncateText .Item.Description 80}}</div>
+              {{end}}
+              <div class="action-meta">
+                {{if not .Item.DateTime.IsZero}}<span>&#x1f4c5; {{.Item.DateTime.Format "Jan 2, 15:04"}}</span>{{end}}
+                {{if gt .Item.DurationMinutes 0}}<span>&#x23f1; {{.Item.DurationMinutes}}min</span>{{end}}
+                <span>via {{.SourceMsg.Sender}}</span>
+              </div>
+            </div>
+            {{end}}
+          {{else}}
+            <div class="empty-state">
+              <div class="empty-state-icon">&#x2705;</div>
+              <div class="empty-state-text">No action items yet</div>
+            </div>
+          {{end}}
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== NOTIFICATIONS ===== -->
+    <section class="notifications card stagger-6">
+      <div class="card-header">
+        <span class="card-title">Recent Notifications</span>
+        <span class="card-count">{{len .Notifications}}</span>
+      </div>
+      <div class="card-body" hx-get="/api/notifications" hx-trigger="every 5s" hx-swap="innerHTML">
+        {{if .Notifications}}
+          {{range .Notifications}}
+          <div class="notif-item">
+            <span class="notif-reason {{.Reason}}">
+              {{if eq .Reason "urgent"}}&#x1f6a8;{{else}}&#x1f4cb;{{end}}
+              {{.Reason}}
+            </span>
+            <span class="notif-body">{{.Message.Sender}}: {{truncateText .Message.Text 60}}</span>
+            <span class="notif-time">{{timeAgo .SentAt}}</span>
+          </div>
+          {{end}}
+        {{else}}
+          <div class="empty-state">
+            <div class="empty-state-icon">&#x1f514;</div>
+            <div class="empty-state-text">No notifications sent yet</div>
+          </div>
+        {{end}}
+      </div>
+    </section>
+
+  </div>
+
+  <!-- SSE connection for instant updates -->
+  <script>
+    if (typeof(EventSource) !== "undefined") {
+      const evtSource = new EventSource("/sse");
+      evtSource.onmessage = function(event) {
+        if (event.data === "refresh") {
+          htmx.trigger(document.body, "sse-refresh");
+        }
+      };
+      evtSource.onerror = function() {
+        console.log("SSE connection lost, relying on polling fallback");
+      };
+    }
+  </script>
+</body>
+</html>

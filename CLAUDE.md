@@ -62,6 +62,10 @@ internal/
     classifier_integration_test.go    - Integration tests (requires OPENAI_API_KEY)
   calendar/calendar.go                - Google Calendar event creation from action items
   notifier/pushover.go                - Pushover push notification sender
+  store/store.go                      - In-memory ring buffer store for processed messages
+  server/
+    server.go                         - HTMX dashboard HTTP server with SSE
+    templates/dashboard.html          - Dashboard UI template (embedded via go:embed)
 ```
 
 ## Key Libraries
@@ -83,6 +87,8 @@ make build            # Build binary
 make run              # Run with config.yaml
 make run-dry          # Dry run (no actual notifications)
 make run-debug        # With debug logging
+make run-ui           # Run with web dashboard at http://localhost:8080
+make run-ui-debug     # Run with dashboard + debug logging
 make test             # Run unit tests
 make test-integration # Run integration tests (requires OPENAI_API_KEY)
 make lint             # Run golangci-lint
@@ -162,6 +168,24 @@ The classifier (`internal/classifier/classifier.go`) uses OpenAI with `response_
 The classifier returns a `ClassificationResult` with:
 - `IsUrgent bool` — whether the message needs immediate attention
 - `ActionItems []ActionItem` — extracted action items with `Title`, `Description`, `DateTime`, and `DurationMinutes`
+
+## Web Dashboard
+
+The HTMX-based dashboard (`internal/server/`) provides a real-time view of message processing:
+
+- **Live Message Feed** — streams incoming messages with source badges, urgency indicators, and action item counts (polls every 2s)
+- **Listener Status** — shows connected/disconnected state, message counts, and last message time for each listener
+- **Stats Panel** — total messages, urgent count, action items, notifications sent, events created, per-source breakdown
+- **Action Items** — extracted action items with title, date, duration, source, and calendar event status
+- **Recent Notifications** — log of sent Pushover notifications with reason and timestamp
+
+**Architecture**:
+- `internal/store/store.go` — Thread-safe in-memory ring buffer (capacity 500) with SSE subscriber support
+- `internal/server/server.go` — HTTP server with 7 routes, HTMX partial templates, SSE endpoint
+- `internal/server/templates/dashboard.html` — Dark-themed dashboard UI (Syne + DM Sans + JetBrains Mono fonts, atmospheric backgrounds, staggered animations)
+- Templates embedded via `go:embed`, no external CSS/JS frameworks except HTMX via CDN
+- SSE for instant updates with polling fallback
+- Server enabled by default on port 8080 (configurable via `config.yaml`)
 
 ## Code Patterns
 

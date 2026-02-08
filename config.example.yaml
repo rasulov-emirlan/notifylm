@@ -38,3 +38,7 @@ calendar:
   token_path: "./calendar-token.json"
   default_duration_minutes: 30
   calendar_id: "primary"                    # Or a specific calendar ID
+
+server:
+  enabled: true
+  port: 8080

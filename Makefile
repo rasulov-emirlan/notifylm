@@ -1,4 +1,4 @@
-.PHONY: build run clean test test-integration lint deps
+.PHONY: build run clean test test-integration lint deps run-ui run-ui-debug
 
 BINARY_NAME=notifylm
 BUILD_DIR=./cmd/notifylm
@@ -14,6 +14,14 @@ run-debug: build
 
 run-dry: build
 	./$(BINARY_NAME) -config config.yaml -dry-run -debug
+
+run-ui: build
+	@echo "Starting notifylm with web UI at http://localhost:8080"
+	./$(BINARY_NAME) -config config.yaml
+
+run-ui-debug: build
+	@echo "Starting notifylm with web UI at http://localhost:8080"
+	./$(BINARY_NAME) -config config.yaml -debug
 
 clean:
 	rm -f $(BINARY_NAME)
