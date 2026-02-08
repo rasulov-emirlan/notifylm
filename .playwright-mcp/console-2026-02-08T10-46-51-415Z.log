@@ -1,0 +1,358 @@
+[     697ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/favicon.ico:0
+[   34538ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   34538ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   34538ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   35516ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   35516ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   35516ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   35516ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   35517ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   35517ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   35517ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   35517ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   35517ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   35518ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   35518ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   35518ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   36540ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   36540ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   36540ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   38542ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   38542ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   38542ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   38558ms] [ERROR] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING @ http://localhost:8080/sse:0
+[   40517ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   40517ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   40518ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   40520ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   40521ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   40521ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   40521ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   40521ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   40521ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   40521ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   40522ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   40522ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   40544ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   40544ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   40544ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   41564ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   42546ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   42546ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   42546ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   44548ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   44548ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   44548ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   44566ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   45521ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   45521ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   45521ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   45523ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   45523ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   45523ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   45523ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   45523ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   45523ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   45523ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   45524ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   45524ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   46551ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   46551ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   46551ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   47571ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   48554ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   48555ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   48555ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   50524ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   50524ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   50524ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   50525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   50525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   50525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   50525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   50525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   50525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   50525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   50525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   50525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   50553ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   50553ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   50553ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   50574ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   52557ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   52557ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   52557ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   53579ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   54557ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   54557ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   54557ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   55525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   55525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   55525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   55525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   55525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   56562ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   56562ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   56562ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   56581ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   58563ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   58563ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   58563ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   59586ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   60525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   60525ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   60525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   60525ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   60526ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   60526ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   60526ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   60527ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   60527ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   60527ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   60527ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   60527ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   60561ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   60561ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   60561ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   62564ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   62565ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   62565ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   62589ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   64566ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   64566ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   64566ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   65531ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   65531ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   65531ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   65531ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   65532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   65532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   65532ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   65532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   65532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   65532ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   65532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   65532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   65593ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   66568ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   66569ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   66569ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   68572ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   68572ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   68572ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   68596ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   70532ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   70532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   70533ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   70533ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   70533ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   70533ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   70534ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   70534ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   70534ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   70534ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   70534ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   70534ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   70571ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   70571ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   70571ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   71599ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   72572ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   72572ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   72572ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   74574ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   74574ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   74574ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   74601ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   75530ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   75530ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   75530ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   75530ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   75530ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   75530ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   75530ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   75530ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   75530ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   75532ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   75532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   75532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   76575ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   76575ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   76575ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   77602ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   78577ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   78577ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   78577ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   80532ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   80532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   80532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   80532ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   80532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   80532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   80532ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   80532ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   80532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   80533ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   80533ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   80533ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   80577ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   80577ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   80578ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   80605ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   82580ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   82580ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   82580ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   83608ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   84580ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   84580ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   84580ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   85536ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   85536ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   85536ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   85536ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   85536ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   85536ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   85536ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   85536ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   85536ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   85537ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   85537ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   85537ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   86583ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   86583ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   86583ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   86610ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   88584ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   88584ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   88584ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   89612ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   90536ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   90536ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   90536ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   90537ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   90537ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   90537ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   90537ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   90537ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   90537ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   90538ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   90538ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   90538ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   90586ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   90586ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   90586ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   92589ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   92589ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   92589ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   92616ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   94590ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   94590ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   94590ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   95541ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[   95541ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[   95541ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[   95541ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   95541ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[   95618ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[   96593ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   96593ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   96593ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   98596ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[   98596ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[   98596ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[   98620ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[  100543ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  100543ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  100543ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[  100544ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  100544ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  100544ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[  100544ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  100544ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  100544ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[  100544ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  100544ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  100544ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[  100596ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  100596ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  100596ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  101624ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[  102599ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  102599ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  102600ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  104601ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  104601ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  104602ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  104629ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[  105543ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[  105543ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[  105543ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[  105543ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  105543ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[  106604ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  106604ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  106604ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  107632ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[  108605ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  108605ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  108605ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  110546ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  110546ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  110546ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[  110546ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  110546ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  110546ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[  110546ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  110546ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  110546ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[  110547ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  110547ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  110547ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[  110605ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  110605ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  110605ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  110634ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[  112610ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  112610ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  112610ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  113636ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
+[  114611ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  114611ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  114611ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  115548ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  115549ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  115549ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/stats:0
+[  115549ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  115549ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  115549ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/listeners:0
+[  115550ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  115550ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  115550ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/actions:0
+[  115550ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  115550ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  115550ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/notifications:0
+[  116614ms] [ERROR] htmx:afterRequest @ https://unpkg.com/htmx.org@2.0.4:0
+[  116614ms] [ERROR] htmx:sendError @ https://unpkg.com/htmx.org@2.0.4:0
+[  116614ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/messages:0
+[  116639ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/sse:0
