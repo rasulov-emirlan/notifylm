@@ -152,8 +152,13 @@ func main() {
 	slog.Info("Unified Notification Interceptor started",
 		"listeners", len(listeners))
 
-	// Wait for all listeners to stop
-	listenerWg.Wait()
+	if len(listeners) > 0 {
+		// Wait for all listeners to stop
+		listenerWg.Wait()
+	} else {
+		slog.Info("No listeners enabled, waiting for shutdown signal")
+		<-ctx.Done()
+	}
 
 	// Close message channel and wait for processor
 	close(messageChan)
